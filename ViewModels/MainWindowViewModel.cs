@@ -6,48 +6,26 @@ namespace Calculator_MVVM.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase 
 {
-    private readonly CalculatorModel _calculatorModel;
-
-    [ObservableProperty]
-    private string _primaryDisplay = "0";
-
-    [ObservableProperty]
-    private string _secondaryDisplay = "";
-
-    public MainWindowViewModel()
-    {
-        _calculatorModel = new CalculatorModel();
-        _calculatorModel.OnDisplayChanged += OnEngineDisplayChanged;
-        OnEngineDisplayChanged();
-    }
-
-    private void OnEngineDisplayChanged()
-    {
-        PrimaryDisplay = _calculatorModel.PrimaryDisplay;
-        SecondaryDisplay = _calculatorModel.SecondaryDisplay;
-    }
+    public CalculatorModel Calculator { get; } = new CalculatorModel();
 
     [RelayCommand]
     private void AddDigit(string digitStr)
     {
         if (int.TryParse(digitStr, out int digit))
         {
-            _calculatorModel.AddDigit(digit);
+            Calculator.AddDigit(digit);
         }
     }
 
     [RelayCommand]
-    private void SetOperator(string op)
-    {
-        _calculatorModel.SetOperator(op);
-    }
+    private void SetOperator(string op) => Calculator.SetOperator(op);
 
     [RelayCommand]
-    private void Calculate() => _calculatorModel.Calculate();
+    private void Calculate() => Calculator.Calculate();
 
     [RelayCommand]
-    private void Backspace() => _calculatorModel.Backspace();
+    private void Backspace() => Calculator.Backspace();
 
     [RelayCommand]
-    private void Clear() => _calculatorModel.Clear();
+    private void Clear() => Calculator.Clear();
 }

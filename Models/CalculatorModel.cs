@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Calculator_MVVM.Models;
 
-public class CalculatorModel
+public partial class CalculatorModel : ObservableObject
 {
     private List<double> _numbers = new List<double> { 0 };
     private List<string> _operations = new List<string>();
@@ -12,10 +13,11 @@ public class CalculatorModel
     private bool _hasTypedCurrentNumber = false;
     private bool _shouldResetOnNextNumber = false;
     
-    public event Action? OnDisplayChanged;
+    [ObservableProperty]
+    private string _primaryDisplay = "0";
     
-    public string PrimaryDisplay => GenerateDisplayString();
-    public string SecondaryDisplay { get; private set; } = "";
+    [ObservableProperty]
+    private string _secondaryDisplay = "";
 
     public void AddDigit(int digit)
     {
@@ -57,7 +59,7 @@ public class CalculatorModel
             else
             {
                 double res = CalculateSingle(_numbers[0], _operations[0], _numbers[1]);
-                SecondaryDisplay = res.ToString();
+                SecondaryDisplay = res.ToString(); 
                 
                 _numbers[0] = res;
                 _operations[0] = op;
@@ -73,6 +75,8 @@ public class CalculatorModel
         if (_operations.Count > 0 && _currentIndex == 1)
         {
             double res = CalculateSingle(_numbers[0], _operations[0], _numbers[1]);
+            
+            
             SecondaryDisplay = res.ToString();
             
             _numbers = new List<double> { res };
@@ -98,6 +102,8 @@ public class CalculatorModel
             _numbers.RemoveAt(1);
             _currentIndex = 0;
             _hasTypedCurrentNumber = true;
+            
+            NotifyDisplayChanged(); 
             return;
         }
 
@@ -112,7 +118,8 @@ public class CalculatorModel
         _currentIndex = 0;
         _hasTypedCurrentNumber = false;
         _shouldResetOnNextNumber = false;
-        SecondaryDisplay = "";
+        SecondaryDisplay = ""; 
+        
         NotifyDisplayChanged();
     }
     
@@ -142,7 +149,6 @@ public class CalculatorModel
     
     private void NotifyDisplayChanged()
     {
-        OnDisplayChanged?.Invoke(); // Abone varsa (null değilse) tetikle
+        PrimaryDisplay = GenerateDisplayString();
     }
 }
-

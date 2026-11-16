@@ -15,8 +15,8 @@
 
     <DockPanel> 
         <StackPanel DockPanel.Dock="Top" Classes="display">
-            <TextBlock Text="{Binding SecondaryDisplay}" />
-            <TextBlock Text="{Binding PrimaryDisplay}" />
+            <TextBlock Text="{Binding Calculator.SecondaryDisplay}" />
+            <TextBlock Text="{Binding Calculator.PrimaryDisplay}" />
         </StackPanel>
         <Grid DockPanel.Dock="Bottom" RowDefinitions="*,*" ColumnDefinitions="3*,*" Classes="buttonLayout">
             <StackPanel Grid.Row="0" Grid.Column="0" Classes="clear">
